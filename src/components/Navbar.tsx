@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import { Button, IconButton, Avatar } from "@mui/material";
-import { Link, NavLink, useLocation } from "react-router-dom";
+"use client"
+
+import React, { useState } from "react"
+import { Button, IconButton, Avatar } from "@mui/material"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import {
   WhatsApp,
@@ -11,18 +14,18 @@ import {
   Close,
   Login as LoginIcon,
   PersonAdd as PersonAddIcon,
-} from "@mui/icons-material";
+} from "@mui/icons-material"
 
-import PersonIcon from "@mui/icons-material/Person";
-import Logo from "../assets/Grupo 1.png";
-import { useLanguage } from "../i18n/LanguageContext";
-import { useCurrentUser } from "../context/useCurrentUser";
+import PersonIcon from "@mui/icons-material/Person"
+import Logo from "../assets/Grupo 1.png"
+import { useLanguage } from "../i18n/LanguageContext"
+import { useCurrentUser } from "../context/useCurrentUser"
 
 const Navbar: React.FC = () => {
-  const { t, toggleLang } = useLanguage();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
-  const loginUser = useCurrentUser();
+  const { t, toggleLang } = useLanguage()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const loginUser = useCurrentUser()
 
   const topNav = [
     { path: "/nuestros", key: "Nuestros", label: "Nuestros" },
@@ -36,11 +39,8 @@ const Navbar: React.FC = () => {
     { path: "/faqpage", key: "faq", label: "FAQ" },
     { path: "/quiénes-somos", key: "quienes_somos", label: "Quiénes Somos" },
 
-
-
-
     // { path: "/CasilleroVirtual", key: "CasilleroVirtual", label: "Virtual Locker" }
-  ];
+  ]
 
   return (
     <>
@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
           >
             EN
           </Button>
-          <Link to="/login">
+          <Link href="/login">
             <Button
               startIcon={<LoginIcon fontSize="small" />}
               sx={{
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
             </Button>
           </Link>
 
-          <Link to="/register">
+          <Link href="/register">
             <Button
               startIcon={<PersonAddIcon fontSize="small" />}
               sx={{
@@ -120,51 +120,49 @@ const Navbar: React.FC = () => {
         <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* LOGO */}
-            <NavLink to="/" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <img
                 src={Logo}
                 alt="Expresur Logo"
                 className="h-5 w-auto md:h-7 md:w-auto object-contain"
               />
-            </NavLink>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden xl:flex items-center space-x-10">
               {topNav.map((n) => (
-                <NavLink
+                <Link
                   key={n.path}
-                  to={n.path}
-                  className={({ isActive }) =>
-                    `text-base font-semibold transition ${isActive
+                  href={n.path}
+                  className={`text-base font-semibold transition ${
+                    pathname === n.path
                       ? "text-[#046838] underline decoration-[#046838] underline-offset-4"
                       : "text-gray-700 hover:text-[#046838]"
-                    }`
-                  }
+                  }`}
                 >
                   {/* cast to any to satisfy TypeScript union mismatch */}
                   {(t && t(n.key as any)) || n.key}
-                </NavLink>
+                </Link>
               ))}
             </nav>
 
             {/* RIGHT SECTION */}
             <div className="flex items-center gap-4">
               {/* TRACK BUTTON */}
-              <NavLink to="/rasterear">
+              <Link href="/rasterear">
                 <button
-                  className={`bg-green-800 hover:bg-[#035230] text-white w-36 md:w-52 text-[10px] md:text-[15px] font-semibold px-4 py-2 rounded-full shadow transition ${location.pathname === "/rasterear"
-                      ? "ring-2 ring-[#046838]"
-                      : ""
-                    }`}
+                  className={`bg-green-800 hover:bg-[#035230] text-white w-36 md:w-52 text-[10px] md:text-[15px] font-semibold px-4 py-2 rounded-full shadow transition ${
+                    pathname === "/rasterear" ? "ring-2 ring-[#046838]" : ""
+                  }`}
                 >
                   {t ? t("rastrear") : "Rastrear"}
                 </button>
-              </NavLink>
+              </Link>
 
               {/* DASHBOARD ICON */}
               {loginUser ? (
-                <NavLink
-                  to={
+                <Link
+                  href={
                     loginUser.role === "admin"
                       ? "/dashboard/admin"
                       : "/dashboard/user-dashboard"
@@ -182,9 +180,9 @@ const Navbar: React.FC = () => {
                   >
                     <PersonIcon sx={{ color: "#fff", fontSize: 22 }} />
                   </Avatar>
-                </NavLink>
+                </Link>
               ) : (
-                <NavLink to="/login">
+                <Link href="/login">
                   <Avatar
                     sx={{
                       width: 40,
@@ -196,7 +194,7 @@ const Navbar: React.FC = () => {
                   >
                     <PersonIcon sx={{ color: "#fff", fontSize: 22 }} />
                   </Avatar>
-                </NavLink>
+                </Link>
               )}
 
               {/* MOBILE MENU BUTTON */}
@@ -231,24 +229,24 @@ const Navbar: React.FC = () => {
             </div>
 
             <nav className="p-6 space-y-6">
-              <NavLink
-                to="/"
+              <Link
+                href="/"
                 className="block text-xl font-bold text-[#046838]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t ? t("inicio") : "Inicio"}
-              </NavLink>
+              </Link>
 
               {topNav.map((n) => (
-                <NavLink
+                <Link
                   key={n.path}
-                  to={n.path}
+                  href={n.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className="block text-lg font-semibold text-gray-800 hover:text-[#046838]"
                 >
                   {/* cast to any here too */}
                   {(t && t(n.key as any)) || n.key}
-                </NavLink>
+                </Link>
               ))}
 
               {/* MOBILE DASHBOARD */}
@@ -257,13 +255,13 @@ const Navbar: React.FC = () => {
                   <Avatar sx={{ bgcolor: "#046838" }}>
                     <PersonIcon sx={{ color: "#fff" }} />
                   </Avatar>
-                  <NavLink
-                    to="/dashboard"
+                  <Link
+                    href="/dashboard"
                     className="text-sm text-green-800 underline"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Go to Dashboard
-                  </NavLink>
+                  </Link>
                 </div>
               </div>
             </nav>
@@ -271,7 +269,7 @@ const Navbar: React.FC = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
