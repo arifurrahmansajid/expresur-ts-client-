@@ -1,72 +1,52 @@
+"use client"
+
 import React from "react";
 import icon from "../../assets/Grupo-icon.png";
-import timeline from "../../assets/Grupoline.png";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const LogisticsTimeline: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
-    <div
-      className="w-full bg-[#026432] py-20 overflow-x-hidden flex justify-center"
-      style={{ translate: "0" }}
-    >
-      {/* Responsive override: make scroll faster on small screens (mobile) */}
-      <style>{`
-        /* adjust breakpoint to your project's mobile breakpoint if needed */
-        @media (max-width: 640px) {
-          /* shorter duration = faster speed */
-          .mobile-faster {
-            animation-duration: 8s !important;
-          }
+    <section className="bg-white py-20 overflow-hidden border-t border-gray-100">
+      <div className="relative w-full">
+        {/* SCROLLING MARQUEE */}
+        <div className="flex animate-scrollX whitespace-nowrap">
+          {/* First Set */}
+          <div className="flex items-center gap-12 px-6">
+            <span className="text-[#046838] text-4xl md:text-6xl font-black tracking-tighter uppercase italic">
+              RÁPIDOS, ECONÓMICOS Y SEGUROS
+            </span>
+            <img src={(icon as any).src || icon} alt="icon" className="h-12 md:h-16 w-auto" />
+            <span className="text-[#046838] text-4xl md:text-6xl font-black tracking-tighter uppercase italic">
+              RÁPIDOS, ECONÓMICOS Y SEGUROS
+            </span>
+            <img src={(icon as any).src || icon} alt="icon" className="h-12 md:h-16 w-auto" />
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="flex items-center gap-12 px-6">
+            <span className="text-[#046838] text-4xl md:text-6xl font-black tracking-tighter uppercase italic">
+              RÁPIDOS, ECONÓMICOS Y SEGUROS
+            </span>
+            <img src={(icon as any).src || icon} alt="icon" className="h-12 md:h-16 w-auto" />
+            <span className="text-[#046838] text-4xl md:text-6xl font-black tracking-tighter uppercase italic">
+              RÁPIDOS, ECONÓMICOS Y SEGUROS
+            </span>
+            <img src={(icon as any).src || icon} alt="icon" className="h-12 md:h-16 w-auto" />
+          </div>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes scrollX {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scrollX {
+          animation: scrollX 30s linear infinite;
         }
       `}</style>
-
-      <div className="relative w-full max-w-[2100px] px-4">
-
-        {/* 🔵 TOP ICON – AUTO LOOP (never pause on hover) */}
-        <div className="w-full overflow-hidden mb-8">
-          <div
-            className="flex will-change-transform animate-scrollX mobile-faster"
-            style={{ animationPlayState: "running", touchAction: "pan-y" }}
-          >
-            <img
-              src={icon}
-              alt="Icon Row"
-              draggable={false}
-              // responsive min-width values so images are smaller on phones
-              className="min-w-[600px] sm:min-w-[1000px] md:min-w-[1600px] lg:min-w-[2000px] max-w-none h-auto object-contain select-none"
-            />
-            <img
-              src={icon}
-              alt="Icon Row Duplicate"
-              draggable={false}
-              className="min-w-[600px] sm:min-w-[1000px] md:min-w-[1600px] lg:min-w-[2000px] max-w-none h-auto object-contain select-none"
-            />
-          </div>
-        </div>
-
-        {/* 🟢 TIMELINE – AUTO LOOP (never pause on hover) */}
-        <div className="w-full overflow-hidden">
-          <div
-            className="flex will-change-transform animate-scrollX mobile-faster"
-            style={{ animationPlayState: "running", touchAction: "pan-y" }}
-          >
-            <img
-              src={timeline}
-              alt="Timeline"
-              draggable={false}
-              // timeline image made a bit wider but responsive on small screens
-              className="min-w-[800px] sm:min-w-[1400px] md:min-w-[2000px] lg:min-w-[2500px] max-w-none h-auto object-contain select-none"
-            />
-            <img
-              src={timeline}
-              alt="Timeline Duplicate"
-              draggable={false}
-              className="min-w-[800px] sm:min-w-[1400px] md:min-w-[2000px] lg:min-w-[2500px] max-w-none h-auto object-contain select-none"
-            />
-          </div>
-        </div>
-
-      </div>
-    </div>
+    </section>
   );
 };
 

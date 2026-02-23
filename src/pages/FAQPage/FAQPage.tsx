@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react"; 
-import { Helmet } from "react-helmet";
 import HeroBg from "../../assets/HeroBg.png";
 
 /* ---------------- TYPES ---------------- */
@@ -117,9 +116,6 @@ const FAQPage: React.FC = () => {
 
   return (
     <section className="w-full bg-white py-20 relative overflow-hidden">
-      <Helmet>
-        <title>FAQ | EXPRESUR</title>
-      </Helmet>
 
       <div
         className="absolute inset-x-0 top-0 h-[60%]"

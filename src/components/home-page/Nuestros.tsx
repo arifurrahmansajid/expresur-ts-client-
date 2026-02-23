@@ -1,270 +1,105 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// src/pages/home/Nuestros.tsx
-import React, { useEffect, useRef, useState, useCallback, useLayoutEffect } from "react";
+"use client"
+
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 import iconPackage from "../../assets/icon-pickup.png";
 import iconRemesas from "../../assets/icon-remesas.png";
 import iconPickup from "../../assets/icon-package.png";
 import iconConfirm from "../../assets/icon-confirm1.png";
+import { useLanguage } from "../../i18n/LanguageContext";
 
-interface Card {
-  title: string;
-  desc: string;
-  icon: string;
+interface CardData {
+  titleKey: string;
+  icon: any;
 }
 
-const baseCards: Card[] = [
-  { title: "ENVÍOS\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPackage },
-  { title: "ENVÍO\nDE REMESAS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconRemesas },
-  { title: "RECOGIDA\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPickup },
-  { title: "CONFORMAR\nENVÍOS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconConfirm },
-  { title: "ENVÍOS\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPackage },
-  { title: "ENVÍO\nDE REMESAS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconRemesas },
-  { title: "RECOGIDA\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPickup },
-  { title: "CONFORMAR\nENVÍOS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconConfirm },
-  { title: "ENVÍOS\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPackage },
-  { title: "ENVÍO\nDE REMESAS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconRemesas },
-  { title: "RECOGIDA\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPickup },
-  { title: "CONFORMAR\nENVÍOS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconConfirm },
-  { title: "ENVÍOS\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPackage },
-  { title: "ENVÍO\nDE REMESAS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconRemesas },
-  { title: "RECOGIDA\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPickup },
-  { title: "CONFORMAR\nENVÍOS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconConfirm },
-  { title: "ENVÍOS\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPackage },
-  { title: "ENVÍO\nDE REMESAS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconRemesas },
-  { title: "RECOGIDA\nDE PAQUETES", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconPickup },
-  { title: "CONFORMAR\nENVÍOS", desc: "Ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud", icon: iconConfirm },
+const serviceCards: CardData[] = [
+  { titleKey: "envios_paquetes", icon: iconPackage },
+  { titleKey: "envio_remesas", icon: iconRemesas },
+  { titleKey: "recogida_paquetes", icon: iconPickup },
+  { titleKey: "conformar_envios", icon: iconConfirm },
+  // Duplicate for slider if needed, or Swiper loop
 ];
 
 const Nuestros: React.FC = () => {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [visibleCount, setVisibleCount] = useState(4);
-  const [currentDot, setCurrentDot] = useState(0);
-  const [ready, setReady] = useState(false);
-
-  const updateVisibleCount = useCallback(() => {
-    if (typeof window === "undefined") return;
-    const w = window.innerWidth;
-    if (w < 640) setVisibleCount(1);
-    else if (w < 768) setVisibleCount(1);
-    else if (w < 1024) setVisibleCount(2);
-    else if (w < 1280) setVisibleCount(3);
-    else setVisibleCount(4);
-  }, []);
-
-  useEffect(() => {
-    updateVisibleCount();
-    window.addEventListener("resize", updateVisibleCount);
-    return () => window.removeEventListener("resize", updateVisibleCount);
-  }, [updateVisibleCount]);
-
-  const cards = [...baseCards, ...baseCards, ...baseCards]; // left | middle | right
-  const total = baseCards.length;
-  const slidePercent = 100 / visibleCount;
-
-  const getStep = useCallback((el: HTMLDivElement) => {
-    return el.clientWidth / visibleCount;
-  }, [visibleCount]);
-
-  // Initial position: middle batch
-  useLayoutEffect(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-
-    requestAnimationFrame(() => {
-      const step = getStep(el);
-      el.scrollLeft = total * step;
-      setReady(true);
-      setCurrentDot(0);
-    });
-  }, [visibleCount, total, getStep]);
-
-  // Update dot indicator (FIXED — NO DESIGN CHANGE)
-  const updateDot = useCallback(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-
-    const step = getStep(el);
-    const batchWidth = total * step;
-    const middleStart = total * step;
-
-    let relative = el.scrollLeft - middleStart;
-    relative = ((relative % batchWidth) + batchWidth) % batchWidth;
-
-    // ✅ FIXED LINE (was Math.round)
-    const idx = Math.floor((relative + step / 2) / step) % total;
-    setCurrentDot(idx);
-  }, [total, getStep]);
-
-  // Normalize position to middle batch (FIXED — NO DESIGN CHANGE)
-  const normalizePosition = useCallback(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-
-    const step = getStep(el);
-    const batchWidth = total * step;
-    const middleStart = total * step;
-
-    let current = el.scrollLeft;
-    let offset = current - middleStart;
-    offset = ((offset % batchWidth) + batchWidth) % batchWidth;
-
-    const target = middleStart + offset;
-
-    // ✅ FIXED CONDITION (prevents snap to first card)
-    if (
-      current < middleStart - step ||
-      current > middleStart + batchWidth + step
-    ) {
-      el.scrollLeft = target;
-    }
-
-    updateDot();
-  }, [total, getStep, updateDot]);
-
-  // Scroll handler
-  useEffect(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-
-    const onScroll = () => {
-      if (rafRef.current === null) {
-        rafRef.current = requestAnimationFrame(() => {
-          rafRef.current = null;
-          updateDot();
-        });
-      }
-
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-
-      scrollTimeoutRef.current = setTimeout(() => {
-        normalizePosition();
-      }, 150);
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [updateDot, normalizePosition]);
-
-  // Arrow button scroll
-  const scrollBySteps = useCallback((steps: number) => {
-    const el = viewportRef.current;
-    if (!el) return;
-
-    const step = getStep(el);
-    el.scrollBy({ left: step * steps, behavior: "smooth" });
-  }, [getStep]);
-
-  // Dot click scroll
-  const scrollToIndex = useCallback((index: number) => {
-    const el = viewportRef.current;
-    if (!el) return;
-
-    const step = getStep(el);
-    const middleStart = total * step;
-    el.scrollTo({ left: middleStart + index * step, behavior: "smooth" });
-  }, [total, getStep]);
-
-  const scrollNext = () => scrollBySteps(1);
-  const scrollPrev = () => scrollBySteps(-1);
-
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-    };
-  }, []);
+  const { t } = useLanguage();
 
   return (
-    <section className="bg-white py-8 mx-auto max-w-[1773px] px-4 sm:px-6 lg:px-8 mt-5">
-      <div className="relative mx-auto w-full max-w-[1400px] rounded-[28px] sm:rounded-[36px] lg:rounded-[43px] shadow-[3px_3px_6px_0_rgba(0,0,0,0.16)] bg-[rgba(4,104,56,1)] text-white p-6 sm:p-10 md:p-12 lg:p-16 overflow-visible -mt-[10%] z-10">
-        <h2 className="text-center text-4xl sm:text-5xl font-semibold mb-6 sm:mb-8 tracking-wide">
-          Nuestros servicios
+    <section className="bg-white py-16 px-4 md:px-8 max-w-[1920px] mx-auto">
+      <div className="bg-primary-green rounded-[40px] md:rounded-[60px] p-8 md:p-16 shadow-xl -mt-24 md:-mt-32 relative z-20">
+        <h2 className="text-center text-white text-4xl md:text-6xl font-bold mb-12 tracking-tight">
+          {t ? t("nuestros_servicios") : "Nuestros servicios"}
         </h2>
 
-        <div className="relative">
-          {/* Prev */}
-          <button onClick={scrollPrev} aria-label="Anterior"
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-green-900 shadow-lg items-center justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          {/* Carousel */}
-          <div
-            ref={viewportRef}
-            className="overflow-x-auto scroll-smooth
-                       [-ms-overflow-style:'none']
-                       [scrollbar-width:'none']
-                       [&::-webkit-scrollbar]:hidden"
-            style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
-          >
-            <div className="flex gap-4 py-6">
-              {cards.map((card, i) => (
-                <div
-                  key={i}
-                  className="relative flex-shrink-0 flex flex-col justify-between rounded-xl border-2 border-amber-500 p-3 sm:p-4 bg-white/8 backdrop-blur-md shadow-md min-h-[200px] sm:min-h-[220px]"
-                  style={{ width: `${slidePercent}%`, scrollSnapAlign: visibleCount === 1 ? "center" : "start" }}
-                >
-                  <button aria-label="Favorito" className="absolute top-2 right-2 text-amber-400 text-sm hidden sm:block">♡</button>
-
-                  <div className="flex justify-center mb-3">
-                    <div className="w-[60%] sm:w-36 md:w-40 lg:w-44 aspect-[4/3] flex items-center justify-center">
-                      <img src={card.icon} alt={card.title.replace(/\n/g, " ")} className="object-contain drop-shadow-md" />
-                    </div>
+        <Swiper
+          modules={[Pagination, Navigation, Autoplay]}
+          spaceBetween={24}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{ delay: 5000 }}
+          pagination={{ clickable: true, el: ".custom-pagination" }}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+          className="pb-16"
+        >
+          {serviceCards.map((card, index) => (
+            <SwiperSlide key={index}>
+              <div className="group h-full">
+                <div className="bg-transparent border-2 border-secondary-orange rounded-[30px] p-6 flex flex-col items-center h-full transition-all duration-300 group-hover:bg-secondary-orange group-hover:border-transparent cursor-pointer">
+                  {/* Icon Container */}
+                  <div className="w-full aspect-[4/3] flex items-center justify-center mb-6">
+                    <img 
+                      src={card.icon?.src || card.icon} 
+                      alt={card.titleKey} 
+                      className="max-h-full object-contain drop-shadow-lg transition-transform duration-300 group-hover:scale-110" 
+                    />
                   </div>
 
-                  <h3 className="text-center whitespace-pre-line font-bold text-amber-100 text-[clamp(0.85rem,1.4vw,1.05rem)] tracking-wider">
-                    {card.title}
+                  {/* Title */}
+                  <h3 className="text-white text-xl md:text-2xl font-bold text-center mb-4 transition-colors duration-300 group-hover:text-primary-green">
+                    {t ? t(card.titleKey as any) : card.titleKey}
                   </h3>
 
-                  <p className="text-center text-green-50/90 text-[clamp(0.72rem,1.0vw,0.9rem)] px-2 leading-relaxed mt-2">
-                    {card.desc}
+                  {/* Description */}
+                  <p className="text-white/80 text-center text-sm mb-8 line-clamp-3 transition-colors duration-300 group-hover:text-primary-green">
+                    {t ? t("lorem_short") : "ismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exer"}
                   </p>
 
-                  <div className="flex justify-center mt-auto pt-3 hidden sm:flex">
-                    <button className="px-4 py-2 rounded-full bg-amber-500 text-green-900 font-bold text-xs shadow-md hover:bg-amber-400 transition">
-                      VER MÁS
-                    </button>
-                  </div>
+                  {/* Button */}
+                  <button className="mt-auto bg-primary-green text-white font-bold py-2.5 px-8 rounded-full border border-secondary-orange transition-all duration-300 group-hover:bg-primary-green group-hover:border-primary-green">
+                    {t ? t("ver_mas") : "VER MÁS"}
+                  </button>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-          {/* Next */}
-          <button onClick={scrollNext} aria-label="Siguiente"
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-green-900 shadow-lg items-center justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Dots */}
-        <div className="mt-8 flex justify-center gap-3 md:hidden">
-          {baseCards.map((_, i) => {
-            const isActive = ready && i === currentDot;
-            return (
-              <button
-                key={i}
-                onClick={() => scrollToIndex(i)}
-                className={`w-3 h-3 rounded-full transition-all duration-250 ${isActive ? "bg-amber-400 scale-125" : "bg-green-300/60"
-                  }`}
-                aria-label={`ir a ${i + 1}`}
-              />
-            );
-          })}
-        </div>
+        {/* Custom Pagination */}
+        <div className="custom-pagination flex justify-center gap-3 mt-4"></div>
       </div>
+
+      <style jsx global>{`
+        .custom-pagination .swiper-pagination-bullet {
+          background: white !important;
+          opacity: 0.5;
+          width: 12px;
+          height: 12px;
+        }
+        .custom-pagination .swiper-pagination-bullet-active {
+          background: #f97316 !important;
+          opacity: 1;
+          transform: scale(1.2);
+        }
+      `}</style>
     </section>
   );
 };

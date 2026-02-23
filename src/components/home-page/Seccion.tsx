@@ -1,48 +1,39 @@
 import React from "react";
 import car from "../../assets/Grupo car.png";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const Seccion: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
-    <div className="w-full max-w-[1673px] min-h-[400px] md:min-h-[500px] lg:h-[662.87px] mx-auto px-4 sm:px-8 md:px-12 lg:px-20 -mb-8 md:-mb-16 lg:-mb-[135px] bg-[#F7941D] flex items-center justify-between rounded-2xl shadow-lg overflow-visible relative py-12 md:py-16 lg:py-0">
-      {/* ---------------- DESKTOP IMAGE ---------------- */}
-      <div className="absolute left-0 -translate-x-8 sm:-translate-x-12 md:-translate-x-16 lg:-translate-x-20 -translate-y-6 md:-translate-y-12 pointer-events-none hidden sm:block">
-        <img
-          src={car}
-          alt="Illustration"
-          className="w-[300px] h-[258px] sm:w-[500px] sm:h-[344px] md:w-[600px] md:h-[516px] lg:w-[800px] lg:h-[805.79px] object-contain"
-        />
-      </div>
+    <section className="bg-white py-16 px-4 md:px-8 max-w-[1920px] mx-auto overflow-visible mb-24">
+      <div className="bg-secondary-orange rounded-[40px] md:rounded-[60px] min-h-[500px] flex flex-col lg:flex-row items-center justify-between p-8 md:p-16 relative shadow-xl">
+        
+        {/* LEFT IMAGE - Isometric Van/Phone */}
+        <div className="lg:absolute lg:left-0 lg:-bottom-20 w-full lg:w-[60%] z-20 flex justify-center lg:justify-start">
+          <img
+            src={(car as any).src || car}
+            alt="Pickup Logistics"
+            className="w-full max-w-[800px] object-contain drop-shadow-2xl scale-110 lg:scale-125 origin-center lg:-translate-y-10 lg:-translate-x-10"
+          />
+        </div>
 
-      {/* ---------------- RIGHT TEXT CONTENT ---------------- */}
-      <div className="w-full sm:w-auto sm:max-w-xl text-white sm:ml-auto z-10">
-        {/* TITLE */}
-        <h1 className="text-center text-5xl font-[Avenir Next LT Pro] text-4xl sm:text-5xl md:text-6xl lg:text-[82px] leading-tight mb-4 md:mb-6">
-          Sección <br /> de Recogida
-        </h1>
+        {/* RIGHT CONTENT */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-right space-y-8 z-10 lg:ml-auto">
+          <h2 className="text-white text-5xl md:text-8xl font-bold tracking-tight leading-tight">
+            {t ? t("seccion_recogida") : "Sección de Recogida"}
+          </h2>
 
-        {/* PARAGRAPH */}
-        <p className="font-[Avenir Next LT Pro] text-sm sm:text-base md:text-[17px] mb-6 md:mb-10 leading-relaxed">
-          rápidos, económicos y seguros Lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-          dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis
-          nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex
-          ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
-          vulputate velit esse molestie consequat.
-        </p>
+          <p className="text-white text-lg md:text-xl leading-relaxed max-w-xl font-medium opacity-90">
+            {t ? t("tracking_lorem") : "rápidos, económicos y seguros Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi."}
+          </p>
 
-        {/* BUTTON */}
-        <button
-          className="w-full sm:w-auto sm:min-w-[300px] md:min-w-[400px] lg:w-[599.59px] h-[56px] sm:h-[60px] md:h-[70.81px] bg-[#046838] rounded-[25px] shadow-md text-white text-lg sm:text-xl md:text-2xl lg:text-[28px] font-[Avenir Next LT Pro] flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 hover:shadow-[0_20px_30px_-5px_rgba(0,0,0,0.35)] hover:bg-[#035228] active:scale-95"
-        >
-          Solicitar Recogida
-        </button>
-
-        {/* MOBILE IMAGE */}
-        <div className="block sm:hidden mt-8 flex justify-center">
-          <img src={car} alt="Illustration" className="w-[100%] h-auto object-contain" />
+          <button className="bg-primary-green hover:opacity-90 text-white font-bold py-4 px-16 rounded-2xl text-xl md:text-2xl transition-all shadow-xl active:scale-95">
+            {t ? t("solicitar_recogida") : "SOLICITAR RECOGIDA"}
+          </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

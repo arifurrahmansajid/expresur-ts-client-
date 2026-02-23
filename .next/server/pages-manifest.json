@@ -1,5 +1,21 @@
 {
-  "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
+  "/_app": "pages/_app.js",
+  "/Contact/Contact": "pages/Contact/Contact.js",
+  "/FAQPage/FAQPage": "pages/FAQPage/FAQPage.js",
+  "/FAQPage/FaqHero": "pages/FAQPage/FaqHero.js",
+  "/FAQPage/FaqMAin": "pages/FAQPage/FaqMAin.js",
+  "/Nuestros/Nuestros": "pages/Nuestros/Nuestros.js",
+  "/Quienessomos/Quienessomos": "pages/Quienessomos/Quienessomos.js",
+  "/Recogida/PickupForm": "pages/Recogida/PickupForm.js",
+  "/Recogida/PickupServiceCard": "pages/Recogida/PickupServiceCard.js",
+  "/Recogida/RecoLogisticsTimeline": "pages/Recogida/RecoLogisticsTimeline.js",
+  "/Recogida/Recogida": "pages/Recogida/Recogida.js",
+  "/about/About": "pages/about/About.js",
+  "/Recogida/RecogidaHero": "pages/Recogida/RecogidaHero.js",
+  "/casillero escritorio/casilleroescritorio": "pages/casillero escritorio/casilleroescritorio.js",
+  "/onile-store/OnlineStore": "pages/onile-store/OnlineStore.js",
+  "/home/Home": "pages/home/Home.js",
+  "/rastrear-page/RastrearPage": "pages/rastrear-page/RastrearPage.js",
   "/_document": "pages/_document.js"
 }
