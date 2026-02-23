@@ -60,6 +60,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "expresur-green": {
+          DEFAULT: "#005f37",
+          foreground: "#ffffff",
+        },
+        "expresur-amber": {
+          DEFAULT: "#ffb100",
+          foreground: "#005f37",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
